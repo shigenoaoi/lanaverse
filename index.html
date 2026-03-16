@@ -50,13 +50,33 @@ function isHttpUrl(url) {
 
 function makeLinkCell(url, label) {
     if (isHttpUrl(url)) {
-        // rel="noopener noreferrer" で安全寄り
         return "<a href='" + url + "' target='_blank' rel='noopener noreferrer'>" + label + "</a>";
     }
     return "-";
 }
 
 function makeBMSTable(info, mark) {
+    // level順にソート
+    info.sort(function (a, b) {
+        var levelA = parseFloat(a.level);
+        var levelB = parseFloat(b.level);
+
+        var aIsNum = !isNaN(levelA);
+        var bIsNum = !isNaN(levelB);
+
+        // 両方数値なら数値比較
+        if (aIsNum && bIsNum) {
+            if (levelA !== levelB) return levelA - levelB;
+        } else {
+            // 数値でない場合は文字列比較
+            var cmp = String(a.level).localeCompare(String(b.level), 'ja');
+            if (cmp !== 0) return cmp;
+        }
+
+        // 同レベル内はタイトル順にしておく
+        return String(a.title).localeCompare(String(b.title), 'ja');
+    });
+
     var x = "";
     var count = 0;
     var obj = $("#table_int");
@@ -91,25 +111,19 @@ function makeBMSTable(info, mark) {
 
         var str = $("<tr></tr>");
 
-        // Level
         $("<td width='5%'>" + mark + x + "</td>").appendTo(str);
 
-        // Title (LR2IR)
         $("<td width='42%'>" +
             "<a href='http://www.dream-pro.info/~lavalse/LR2IR/search.cgi?mode=ranking&bmsmd5=" +
             info[i].md5 + "' target='_blank' rel='noopener noreferrer'>" +
             info[i].title + "</a></td>").appendTo(str);
 
-        // Artist
         $("<td width='33%'>" + info[i].artist + "</td>").appendTo(str);
 
-        // 本体リンク（スプレッドシート側で body_url を入れる）
         $("<td width='6%'>" + makeLinkCell(info[i].body_url, "本体") + "</td>").appendTo(str);
 
-        // 差分リンク（スプレッドシート側で diff_url を入れる）
         $("<td width='6%'>" + makeLinkCell(info[i].diff_url, "差分") + "</td>").appendTo(str);
 
-        // Comment
         $("<td width='8%'>" + (info[i].comment || "") + "</td>").appendTo(str);
 
         str.appendTo(obj);
