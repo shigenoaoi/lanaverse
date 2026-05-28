@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -113,9 +114,10 @@ function makeBMSTable(info, mark) {
 
         $("<td width='5%'>" + mark + x + "</td>").appendTo(str);
 
+        var titleURL = "https://mocha-repository.info/song.php?sha256=" + info[i].sha256;
+
         $("<td width='42%'>" +
-            "<a href='http://www.dream-pro.info/~lavalse/LR2IR/search.cgi?mode=ranking&bmsmd5=" +
-            info[i].md5 + "' target='_blank' rel='noopener noreferrer'>" +
+            "<a href='" + titleURL + "' target='_blank' rel='noopener noreferrer'>" +
             info[i].title + "</a></td>").appendTo(str);
 
         $("<td width='33%'>" + info[i].artist + "</td>").appendTo(str);
@@ -142,3 +144,4 @@ function makeBMSTable(info, mark) {
 </div>
 </body>
 </html>
+```
