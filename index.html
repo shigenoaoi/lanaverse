@@ -113,7 +113,7 @@ function makeBMSTable(info, mark) {
 
         $("<td width='5%'>" + mark + x + "</td>").appendTo(str);
 
-        var titleURL = "https://mocha-repository.info/song.php?sha256=" + info[i].sha256;
+        var titleURL = "https://bms-ir.org/new/song?songmd5=" + info[i].md5;
 
         $("<td width='42%'>" +
             "<a href='" + titleURL + "' target='_blank' rel='noopener noreferrer'>" +
